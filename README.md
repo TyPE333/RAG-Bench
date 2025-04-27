@@ -3,6 +3,7 @@
 RAG-Bench is a modular framework to evaluate the retrieval component performance in Retrieval-Augmented Generation (RAG) systems.  
 It measures how well different retrieval methods surface relevant documents for a given set of queries, using standard information retrieval metrics.
 
+[Planning and Design doc ->](https://docs.google.com/document/d/1vuv3pliy8DV-ipau8KcpQVdp-q1hpTLvozZq0eNrvfA/edit?usp=sharing)
 ---
 
 ## 🎯 Project Objective
