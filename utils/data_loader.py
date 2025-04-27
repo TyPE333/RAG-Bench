@@ -1,0 +1,1 @@
+#data loader script that loads queries and documents from the specified path
