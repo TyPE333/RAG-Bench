@@ -1,13 +1,3 @@
-Here’s your updated `README.md` that reflects the **current progress**, including:
-
-- Completion of BM25 retriever  
-- Completed evaluator with metrics and threshold checks  
-- Full CLI integration  
-- Reranker + Streamlit dashboard planned as Phase 2
-
----
-
-```markdown
 # RAG-Bench: Retrieval Evaluation Framework for RAG Pipelines
 
 RAG-Bench is a modular evaluation framework for benchmarking the **retrieval performance** of different components in Retrieval-Augmented Generation (RAG) systems.  
@@ -110,7 +100,3 @@ python main.py \
 ✅ BM25 retriever, evaluation engine, and CLI interface implemented and tested  
 🚧 Phase 2: Reranker integration and dashboard development **in progress**
 ```
-
----
-
-Would you like me to package this up as a downloadable file or just let you copy it into your repo?
