@@ -1,17 +1,19 @@
 # RAG-Bench: Retrieval Evaluation Framework for RAG Pipelines
 
-RAG-Bench is a modular framework to evaluate the retrieval component performance in Retrieval-Augmented Generation (RAG) systems.  
-It measures how well different retrieval methods surface relevant documents for a given set of queries, using standard information retrieval metrics.
+RAG-Bench is a modular evaluation framework for benchmarking the **retrieval performance** of different components in Retrieval-Augmented Generation (RAG) systems.  
+It computes standard information retrieval metrics and supports plug-and-play evaluation for various retrievers and rerankers.
 
-[Planning and Design doc ->](https://docs.google.com/document/d/1vuv3pliy8DV-ipau8KcpQVdp-q1hpTLvozZq0eNrvfA/edit?usp=sharing)
+[📄 Planning and Design Doc →](https://docs.google.com/document/d/1vuv3pliy8DV-ipau8KcpQVdp-q1hpTLvozZq0eNrvfA/edit?usp=sharing)
+
 ---
 
 ## 🎯 Project Objective
 
-- Evaluate multiple retrievers (e.g., BM25, DenseRetriever) on a fixed query set and document store.
-- Compute standard retrieval quality metrics like Precision@K, Recall@K, and NDCG.
-- Determine whether retrievers meet predefined performance thresholds.
-- Provide a modular, extensible evaluation pipeline.
+- Evaluate retrievers (currently: BM25) on a fixed query set and document store.
+- Compute standard retrieval metrics: Precision@K, Recall@K, and NDCG@K.
+- Determine if each retriever meets predefined performance thresholds.
+- Enable modular extension with rerankers, hybrid retrievers, and future QA scoring.
+- Visualize retrieval behavior and failure cases through an interactive dashboard (Phase 2).
 
 ---
 
@@ -19,71 +21,82 @@ It measures how well different retrieval methods surface relevant documents for 
 
 ```
 rag-bench/
-├── data/                  # Indexed document embeddings and metadata
-├── queries/                # Query sets (JSON or CSV)
-├── retrievers/             # Retrieval implementations
+├── data/                     # Indexed document embeddings, metadata, and ground truth
+├── queries/                  # Query sets (JSON or CSV)
+├── retrievers/               # Retrieval implementations
 │   ├── base_retriever.py
-│   ├── bm25_retriever.py
-│   └── dense_retriever.py
-├── evaluation/             # Metric computation and threshold evaluation
+│   └── bm25_retriever.py
+├── rerankers/                # (Planned) Reranker modules
+│   ├── base_reranker.py
+│   └── bge_reranker.py       # (To be added in Phase 2)
+├── evaluation/               # Metric computation and performance checking
 │   └── evaluator.py
-├── reports/                # Generated evaluation results (JSON/CSV)
-├── utils/                  # Data loaders and helper functions
+├── reports/                  # Evaluation result outputs (JSON/CSV)
+├── utils/                    # Helper utilities
 │   └── data_loader.py
-├── main.py                 # Main orchestration script
+├── dashboard/                # (Planned) Streamlit dashboard for Phase 2
+│   └── app.py
+├── main.py                   # CLI orchestration script
 ├── README.md
 ├── requirements.txt
-└── setup.py (optional)
+└── setup.py                  # (Optional, for pip packaging)
 ```
 
 ---
 
 ## 🛠 Core Components
 
-| Component | Responsibility |
-|-----------|-----------------|
-| Data Loader | Load document embeddings, metadata, queries |
-| Retriever Interface | Abstract retriever class for different retrieval methods |
-| Evaluator | Compute retrieval metrics and check performance thresholds |
-| Report Generator | Save evaluation results in structured format |
-| Main Orchestrator | Tie everything together and run evaluation |
+| Component        | Responsibility |
+|------------------|----------------|
+| **Data Loader**        | Loads queries, documents, and optional ground truth labels |
+| **BM25 Retriever**     | Sparse bag-of-words retriever using `rank_bm25` |
+| **Evaluator**          | Computes Precision@K, Recall@K, NDCG@K per query and per retriever |
+| **Threshold Checker**  | Flags whether each retriever passes/fails based on configured metrics |
+| **Report Generator**   | Saves results in structured CSV/JSON formats |
+| **Main Orchestrator**  | Runs the full pipeline from CLI |
 
 ---
 
-## ⚙️ Planned Retrieval Metrics
+## 📊 Current Retrieval Metrics
 
 - **Precision@K**
 - **Recall@K**
 - **NDCG@K**
-- (Extensible to MRR, MAP in future phases)
+
+(Framework designed to support MRR, MAP, and LLM-based grounding checks in future phases.)
 
 ---
 
-## 🚀 How To Run (Planned MVP Flow)
+## 🚀 How To Run
 
 ```bash
 python main.py \
-  --retrievers bm25 dense \
+  --retrievers bm25 \
   --query_file queries/queries.json \
-  --embedding_store data/embeddings.faiss \
-  --ground_truth data/ground_truth.json \
-  --output_dir reports/
+  --ground_truth_file data/ground_truth.json \
+  --output_dir reports/ \
+  --k 5
 ```
 
-✅ (Arguments and options will be finalized during Phase 1 development.)
+✅ CLI includes arguments for retriever name(s), top-K, input/output paths, and will support reranking in Phase 2.
 
 ---
 
-## 📈 Future Enhancements
+## 🧪 Phase 2 Roadmap (In Progress)
 
-- Add hybrid retrieval strategies (combining dense and sparse retrievers).
-- Extend evaluation to include generation quality (full end-to-end RAG evaluation).
-- Support for real-time retrieval monitoring and dashboards.
-- Integration with production-grade vector databases (e.g., FAISS, Qdrant, Milvus).
+- ✅ Integrate `BGE-Reranker` (cross-encoder) to improve document ordering
+- ✅ Add `base_reranker.py` to standardize reranker interface
+- 🔜 Update `main.py` to support reranking via CLI flag
+- 🔜 Build **Streamlit dashboard** for visual exploration:
+  - Metric comparison across retrievers
+  - Per-query inspection of retrieved docs
+  - Failure mode analysis (low recall, missing ground truth, etc.)
 
 ---
 
 ## 📋 Current Status
 
-✅ Project planning and system design completed.  
-🚀 Phase 1 MVP (retrieval evaluation and reporting) development underway.
+✅ System design, planning, and Phase 1 MVP completed  
+✅ BM25 retriever, evaluation engine, and CLI interface implemented and tested  
+🚧 Phase 2: Reranker integration and dashboard development **in progress**
+```
