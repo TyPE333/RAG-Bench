@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument("--gt", type=str, default="data/qrels.json")
     parser.add_argument("--retrievers", type=str, default="bm25")
     parser.add_argument("--rerankers", type=str, default="")
-    parser.add_argument("--report", type=str, default="reports/report.json")
+    parser.add_argument("--report_dir", type=str, default="reports/")
     parser.add_argument("--topk", type=int, default=1000)
     return parser.parse_args()
 
@@ -79,6 +79,19 @@ if __name__ == "__main__":
                 if strategy not in results:
                     results[strategy] = {}
                 results[strategy][query_id] = docs
-
+    
+    
+    try:
+        #check if args.report is a file and not a directory
+        if os.path.exists(args.report) and not os.path.isdir(args.report):
+            raise ValueError("Report directory is either not valid or does not exist")
+    except ValueError as e:
+        print(f"Error: {e}")
+        exit(1)
+    
+    #if report directory is not valid, create it
+    if not os.path.exists(args.report):
+        os.makedirs(args.report)
+        
     evaluator = Evaluator(k=args.topk)
-    evaluator.evaluate(results, gt, output_path=args.report)
+    evaluator.evaluate(results, gt, output_dir=args.report)
