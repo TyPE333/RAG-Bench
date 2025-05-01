@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 
 class Reranker(ABC):
     @abstractmethod
-    def rerank(self, query: str, documents: list[dict]) -> list[dict]:
+    def rerank(self, query: str, documents: List[Dict]) -> List[Dict]:
         """
         Re-rank a list of documents for a given query.
 
