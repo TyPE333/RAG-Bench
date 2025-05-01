@@ -1,7 +1,7 @@
 # RAG-Bench: Retrieval Evaluation Framework for RAG Pipelines
 
-RAG-Bench is a modular evaluation framework for benchmarking the **retrieval performance** of different components in Retrieval-Augmented Generation (RAG) systems.  
-It computes standard information retrieval metrics and supports plug-and-play evaluation for various retrievers and rerankers.
+RAG-Bench is a modular evaluation framework for benchmarking the **retrieval performance** of components in Retrieval-Augmented Generation (RAG) systems.  
+It computes standard IR metrics and supports plug-and-play evaluation for multiple retrievers and rerankers.
 
 [📄 Planning and Design Doc →](https://docs.google.com/document/d/1vuv3pliy8DV-ipau8KcpQVdp-q1hpTLvozZq0eNrvfA/edit?usp=sharing)
 
@@ -11,9 +11,9 @@ It computes standard information retrieval metrics and supports plug-and-play ev
 
 - Evaluate retrievers (currently: BM25) on a fixed query set and document store.
 - Compute standard retrieval metrics: Precision@K, Recall@K, and NDCG@K.
-- Determine if each retriever meets predefined performance thresholds.
-- Enable modular extension with rerankers, hybrid retrievers, and future QA scoring.
-- Visualize retrieval behavior and failure cases through an interactive dashboard (Phase 2).
+- Determine if each retriever or reranked pipeline meets configurable performance thresholds.
+- Support modular extension to dense retrievers, hybrid methods, and LLM-grounded scoring.
+- Visualize query-level behavior and retrieval quality via a Streamlit dashboard.
 
 ---
 
@@ -21,25 +21,24 @@ It computes standard information retrieval metrics and supports plug-and-play ev
 
 ```
 rag-bench/
-├── data/                     # Indexed document embeddings, metadata, and ground truth
+├── data/                     # Corpus, metadata, and ground truth
 ├── queries/                  # Query sets (JSON or CSV)
-├── retrievers/               # Retrieval implementations
+├── retrievers/               # Retrieval modules
 │   ├── base_retriever.py
 │   └── bm25_retriever.py
-├── rerankers/                # (Planned) Reranker modules
+├── rerankers/                # Reranking modules
 │   ├── base_reranker.py
-│   └── bge_reranker.py       # (To be added in Phase 2)
-├── evaluation/               # Metric computation and performance checking
+│   └── bge_reranker.py       # HuggingFace cross-encoder reranker
+├── evaluation/               # Metric computation and threshold evaluation
 │   └── evaluator.py
-├── reports/                  # Evaluation result outputs (JSON/CSV)
-├── utils/                    # Helper utilities
+├── reports/                  # Output reports (JSON/CSV)
+├── utils/                    # Shared utilities
 │   └── data_loader.py
-├── dashboard/                # (Planned) Streamlit dashboard for Phase 2
+├── dashboard/                # (Planned) Streamlit dashboard
 │   └── app.py
-├── main.py                   # CLI orchestration script
-├── README.md
+├── main.py                   # Orchestration script (CLI)
 ├── requirements.txt
-└── setup.py                  # (Optional, for pip packaging)
+└── README.md
 ```
 
 ---
@@ -48,12 +47,12 @@ rag-bench/
 
 | Component        | Responsibility |
 |------------------|----------------|
-| **Data Loader**        | Loads queries, documents, and optional ground truth labels |
-| **BM25 Retriever**     | Sparse bag-of-words retriever using `rank_bm25` |
-| **Evaluator**          | Computes Precision@K, Recall@K, NDCG@K per query and per retriever |
-| **Threshold Checker**  | Flags whether each retriever passes/fails based on configured metrics |
-| **Report Generator**   | Saves results in structured CSV/JSON formats |
-| **Main Orchestrator**  | Runs the full pipeline from CLI |
+| **Retriever Interface**   | Unified API for plug-in retrievers (BM25 complete) |
+| **Reranker Interface**    | Cross-encoder reranking support via `BGE-Reranker` |
+| **Evaluator**             | Computes metrics and checks thresholds |
+| **Report Generator**      | Outputs results to structured JSON/CSV |
+| **Orchestrator (`main.py`)** | Runs retrievers/rerankers via registry + CLI |
+| **Test Suite**            | Unit tests for retrievers, rerankers, and evaluation logic |
 
 ---
 
@@ -63,7 +62,9 @@ rag-bench/
 - **Recall@K**
 - **NDCG@K**
 
-(Framework designed to support MRR, MAP, and LLM-based grounding checks in future phases.)
+Framework is extensible to:
+- MRR, MAP
+- LLM-based grounding and hallucination detection (future)
 
 ---
 
@@ -71,32 +72,34 @@ rag-bench/
 
 ```bash
 python main.py \
+  --corpus data/corpus.json \
+  --queries data/queries.json \
+  --gt data/qrels.json \
   --retrievers bm25 \
-  --query_file queries/queries.json \
-  --ground_truth_file data/ground_truth.json \
-  --output_dir reports/ \
-  --k 5
+  --rerankers bge \
+  --report reports/eval_reranked.json \
+  --topk 5
 ```
 
-✅ CLI includes arguments for retriever name(s), top-K, input/output paths, and will support reranking in Phase 2.
+✅ CLI supports multiple retrievers and rerankers using a clean registry pattern.
 
 ---
 
-## 🧪 Phase 2 Roadmap (In Progress)
+## 📈 Phase 2 Features (In Progress)
 
-- ✅ Integrate `BGE-Reranker` (cross-encoder) to improve document ordering
-- ✅ Add `base_reranker.py` to standardize reranker interface
-- 🔜 Update `main.py` to support reranking via CLI flag
-- 🔜 Build **Streamlit dashboard** for visual exploration:
-  - Metric comparison across retrievers
-  - Per-query inspection of retrieved docs
-  - Failure mode analysis (low recall, missing ground truth, etc.)
+- ✅ Integrated `BGE-Reranker` (cross-encoder) for document re-scoring
+- ✅ Refactored orchestration logic with `run_pipeline()` abstraction
+- ✅ Unit tested reranker integration with edge cases
+- 🔜 Build Streamlit dashboard for:
+  - Metric comparison across strategies
+  - Per-query exploration of retrieved vs. missed documents
+  - Failure mode filtering and sorting
 
 ---
 
 ## 📋 Current Status
 
-✅ System design, planning, and Phase 1 MVP completed  
-✅ BM25 retriever, evaluation engine, and CLI interface implemented and tested  
-🚧 Phase 2: Reranker integration and dashboard development **in progress**
+✅ Phase 1 complete: retriever implementation, evaluator, CLI  
+✅ Phase 2 reranker integrated and tested  
+🚧 Streamlit dashboard under development  
 ```
