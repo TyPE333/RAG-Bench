@@ -1,0 +1,22 @@
+[
+  {
+    "query_id": "q1",
+    "retriever": "bm25+bge",
+    "precision@5_value": 0.2,
+    "precision@5_status": "fail",
+    "recall@5_value": 1.0,
+    "recall@5_status": "pass",
+    "ndcg@5_value": 0.5,
+    "ndcg@5_status": "pass"
+  },
+  {
+    "query_id": "q2",
+    "retriever": "bm25+bge",
+    "precision@5_value": 0.2,
+    "precision@5_status": "fail",
+    "recall@5_value": 1.0,
+    "recall@5_status": "pass",
+    "ndcg@5_value": 1.0,
+    "ndcg@5_status": "pass"
+  }
+]
