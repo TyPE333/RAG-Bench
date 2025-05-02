@@ -110,7 +110,7 @@ class Evaluator:
         self,
         retrievers_outputs: Dict[str, Dict[str, List[Dict[str, Any]]]],
         ground_truth: Optional[Dict[str, List[str]]] = None,
-        output_dir: str = "reports/"
+        output_file_path: str = "reports/retrieval_performance.json"
     ) -> None:
         """
         Evaluate all retrievers across all queries and write reports.
@@ -118,10 +118,13 @@ class Evaluator:
         Args:
             retrievers_outputs: Dict[retriever_name -> Dict[query_id -> list of retrieved docs]]
             ground_truth: Dict[query_id -> list of relevant doc IDs]
-            output_dir: Folder to save evaluation reports
+            output_file_path: File to save evaluation data
         """
 
-        os.makedirs(output_dir, exist_ok=True)
+        #if file does not exist create
+        if not os.path.exists(output_file_path):
+            with open(output_file_path, "w") as f:
+                json.dump({}, f)
 
         for retriever_name, retriever_queries in retrievers_outputs.items():
             print(f"Evaluating {retriever_name}...")
@@ -147,15 +150,30 @@ class Evaluator:
                 all_results.append(row)
 
             # Save CSV file
-            output_csv = os.path.join(output_dir, f"{retriever_name}_eval_report.csv")
+            output_csv = output_file_path.replace(".json", ".csv")
             with open(output_csv, mode="w", newline="", encoding="utf-8") as f:
                 writer = csv.DictWriter(f, fieldnames=all_results[0].keys())
                 writer.writeheader()
                 writer.writerows(all_results)
 
             # Save JSON version
-            output_json = os.path.join(output_dir, f"{retriever_name}_eval_report.json")
+            output_json = output_file_path
+
+            # Load existing data if the file exists
+            if os.path.exists(output_json):
+                with open(output_json, "r", encoding="utf-8") as f:
+                    try:
+                        existing_data = json.load(f)
+                    except json.JSONDecodeError:
+                        existing_data = []  # Handle empty or corrupted JSON files
+            else:
+                existing_data = []
+
+            # Append new data
+            existing_data.extend(all_results)
+
+            # Save back to JSON file
             with open(output_json, "w", encoding="utf-8") as f:
-                json.dump(all_results, f, indent=2)
+                json.dump(existing_data, f, indent=2)
 
             print(f"Saved evaluation report for {retriever_name} at {output_csv}")
