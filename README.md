@@ -17,6 +17,12 @@ It computes standard IR metrics and supports plug-and-play evaluation for multip
 
 ---
 
+## 🖥️ Dashboard Preview
+
+![Dashboard Demo](dashboard_preview.gif)
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -85,21 +91,20 @@ python main.py \
 
 ---
 
-## 📈 Phase 2 Features (In Progress)
+## 📈 Phase 2 Features (Completed)
 
 - ✅ Integrated `BGE-Reranker` (cross-encoder) for document re-scoring
 - ✅ Refactored orchestration logic with `run_pipeline()` abstraction
 - ✅ Unit tested reranker integration with edge cases
-- 🔜 Build Streamlit dashboard for:
-  - Metric comparison across strategies
-  - Per-query exploration of retrieved vs. missed documents
-  - Failure mode filtering and sorting
+- ✅ Built an interactive Streamlit dashboard for:
+  - 📊 Metric comparison across retrieval strategies
+  - 🔍 Per-query exploration of retrieved document content
+  - ⚠️ Failure mode filtering and performance debugging
 
 ---
 
 ## 📋 Current Status
 
 ✅ Phase 1 complete: retriever implementation, evaluator, CLI  
-✅ Phase 2 reranker integrated and tested  
-🚧 Streamlit dashboard under development  
-```
+✅ Phase 2 complete: reranker integration + Streamlit dashboard  
+✅ Project fully functional and demo-ready
