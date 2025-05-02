@@ -80,18 +80,19 @@ if __name__ == "__main__":
                     results[strategy] = {}
                 results[strategy][query_id] = docs
     
-    
+    report_path = args.report_dir
+
     try:
         #check if args.report is a file and not a directory
-        if os.path.exists(args.report) and not os.path.isdir(args.report):
+        if os.path.exists(report_path) and not os.path.isdir(report_path):
             raise ValueError("Report directory is either not valid or does not exist")
     except ValueError as e:
         print(f"Error: {e}")
         exit(1)
     
     #if report directory is not valid, create it
-    if not os.path.exists(args.report):
-        os.makedirs(args.report)
+    if not os.path.exists(report_path):
+        os.makedirs(report_path)
         
     evaluator = Evaluator(k=args.topk)
-    evaluator.evaluate(results, gt, output_dir=args.report)
+    evaluator.evaluate(results, gt, output_dir=report_path)
