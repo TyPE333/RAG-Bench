@@ -1,0 +1,74 @@
+[
+  {
+    "query_id": "q1",
+    "retriever": "bm25+bge",
+    "precision@5_value": 0.3333333333333333,
+    "precision@5_threshold": 0.5,
+    "precision@5_status": "fail",
+    "recall@5_value": 1.0,
+    "recall@5_threshold": 0.3,
+    "recall@5_status": "pass",
+    "ndcg@5_value": 0.6309297535714575,
+    "ndcg@5_threshold": 0.4,
+    "ndcg@5_status": "pass",
+    "retrieved_doc_ids": [
+      "doc3",
+      "doc1",
+      "doc2"
+    ]
+  },
+  {
+    "query_id": "q2",
+    "retriever": "bm25+bge",
+    "precision@5_value": 0.3333333333333333,
+    "precision@5_threshold": 0.5,
+    "precision@5_status": "fail",
+    "recall@5_value": 1.0,
+    "recall@5_threshold": 0.3,
+    "recall@5_status": "pass",
+    "ndcg@5_value": 1.0,
+    "ndcg@5_threshold": 0.4,
+    "ndcg@5_status": "pass",
+    "retrieved_doc_ids": [
+      "doc2",
+      "doc5",
+      "doc1"
+    ]
+  },
+  {
+    "query_id": "q1",
+    "retriever": "bm25",
+    "precision@5_value": 0.3333333333333333,
+    "precision@5_threshold": 0.5,
+    "precision@5_status": "fail",
+    "recall@5_value": 1.0,
+    "recall@5_threshold": 0.3,
+    "recall@5_status": "pass",
+    "ndcg@5_value": 1.0,
+    "ndcg@5_threshold": 0.4,
+    "ndcg@5_status": "pass",
+    "retrieved_doc_ids": [
+      "doc1",
+      "doc2",
+      "doc3"
+    ]
+  },
+  {
+    "query_id": "q2",
+    "retriever": "bm25",
+    "precision@5_value": 0.3333333333333333,
+    "precision@5_threshold": 0.5,
+    "precision@5_status": "fail",
+    "recall@5_value": 1.0,
+    "recall@5_threshold": 0.3,
+    "recall@5_status": "pass",
+    "ndcg@5_value": 1.0,
+    "ndcg@5_threshold": 0.4,
+    "ndcg@5_status": "pass",
+    "retrieved_doc_ids": [
+      "doc2",
+      "doc5",
+      "doc1"
+    ]
+  }
+]

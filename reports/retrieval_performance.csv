@@ -1,0 +1,3 @@
+query_id,retriever,precision@5_value,precision@5_threshold,precision@5_status,recall@5_value,recall@5_threshold,recall@5_status,ndcg@5_value,ndcg@5_threshold,ndcg@5_status,retrieved_doc_ids
+q1,bm25,0.3333333333333333,0.5,fail,1.0,0.3,pass,1.0,0.4,pass,"['doc1', 'doc2', 'doc3']"
+q2,bm25,0.3333333333333333,0.5,fail,1.0,0.3,pass,1.0,0.4,pass,"['doc2', 'doc5', 'doc1']"
