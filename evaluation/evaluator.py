@@ -138,6 +138,7 @@ class Evaluator:
                 }
                 for metric_name, metric_result in metrics.items():
                     row[f"{metric_name}_value"] = metric_result["value"]
+                    row[f"{metric_name}_threshold"] = metric_result["threshold"]
                     row[f"{metric_name}_status"] = metric_result["status"]
                 
                 # Add the ids of retrieved docs to the row
