@@ -29,10 +29,10 @@ It computes standard IR metrics and supports plug-and-play evaluation for multip
 rag-bench/
 ├── data/                     # Corpus, metadata, and ground truth
 ├── queries/                  # Query sets (JSON or CSV)
-├── retrievers/               # Retrieval modules
+├── retrievers/               # Retrieval modules (new retrieval scripts go here)
 │   ├── base_retriever.py
 │   └── bm25_retriever.py
-├── rerankers/                # Reranking modules
+├── rerankers/                # Reranking modules (new reranker scripts go here)
 │   ├── base_reranker.py
 │   └── bge_reranker.py       # HuggingFace cross-encoder reranker
 ├── evaluation/               # Metric computation and threshold evaluation
@@ -40,7 +40,7 @@ rag-bench/
 ├── reports/                  # Output reports (JSON/CSV)
 ├── utils/                    # Shared utilities
 │   └── data_loader.py
-├── dashboard/                # (Planned) Streamlit dashboard
+├── dashboard/                # Streamlit dashboard
 │   └── app.py
 ├── main.py                   # Orchestration script (CLI)
 ├── requirements.txt
