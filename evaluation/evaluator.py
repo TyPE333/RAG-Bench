@@ -140,6 +140,9 @@ class Evaluator:
                     row[f"{metric_name}_value"] = metric_result["value"]
                     row[f"{metric_name}_status"] = metric_result["status"]
                 
+                # Add the ids of retrieved docs to the row
+                row["retrieved_doc_ids"] = [doc["id"] for doc in retrieved_docs]
+                
                 all_results.append(row)
 
             # Save CSV file
@@ -149,7 +152,7 @@ class Evaluator:
                 writer.writeheader()
                 writer.writerows(all_results)
 
-            # (Optional) Save JSON version
+            # Save JSON version
             output_json = os.path.join(output_dir, f"{retriever_name}_eval_report.json")
             with open(output_json, "w", encoding="utf-8") as f:
                 json.dump(all_results, f, indent=2)
